@@ -1,0 +1,24 @@
+[{
+    "title": "Rollup 1 on Geth",
+    "url": "http://localhost:7545",
+    "group": "Mainnets",
+    "icon": ""
+},
+{
+    "title": "Rollup 2 on Geth",
+    "url": "http://localhost:7546",
+    "group": "Mainnets",
+    "icon": ""
+},
+{
+    "title": "Rollup 1 State on Solana",
+    "url": "http://3.92.222.8:9090/solana",
+    "group": "Mainnets",
+    "icon": ""
+},
+{
+    "title": "Rollup 2 State on Solana",
+    "url": "http://3.92.222.8:9091/solana",
+    "group": "Mainnets",
+    "icon": ""
+}]
