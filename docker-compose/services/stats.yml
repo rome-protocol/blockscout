@@ -41,7 +41,7 @@ services:
     restart: always
     container_name: 'stats'
     extra_hosts:
-      - 'host.docker.internal:host-gateway'
+      - '172.17.0.1:host-gateway'
     env_file:
       -  ../envs/common-stats.env
     environment:
