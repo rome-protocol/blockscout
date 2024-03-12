@@ -5,7 +5,7 @@ services:
     image: nginx
     container_name: proxy
     extra_hosts:
-      - '172.17.0.1:host-gateway'
+      - 'rollup1-client.devnet.romeprotocol.xyz:host-gateway'
     volumes:
       - "../proxy:/etc/nginx/templates"
     environment:
@@ -15,7 +15,7 @@ services:
       - ../envs/rollup.env
     ports:
       - target: 80
-        published: ${NEXT_PUBLIC_API_PORT}
+        published: 7000 # hardcoded to port 7000
       - target: 8080
         published: 8080
       - target: 8081

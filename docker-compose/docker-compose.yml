@@ -43,9 +43,9 @@ services:
     env_file:
       - rollup.env
     environment:
-      ETHEREUM_JSONRPC_HTTP_URL: https://172.17.0.1/
-      ETHEREUM_JSONRPC_TRACE_URL: https://172.17.0.1/
-      ETHEREUM_JSONRPC_WS_URL: https://172.17.0.1/ws/
+      ETHEREUM_JSONRPC_HTTP_URL: https://rollup1-client.devnet.romeprotocol.xyz/
+      ETHEREUM_JSONRPC_TRACE_URL: https://rollup1-client.devnet.romeprotocol.xyz/
+      ETHEREUM_JSONRPC_WS_URL: https://rollup1-client.devnet.romeprotocol.xyz/ws/
 
   visualizer:
     extends:

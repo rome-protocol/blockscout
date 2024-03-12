@@ -41,7 +41,7 @@ services:
     restart: always
     container_name: 'stats'
     extra_hosts:
-      - '172.17.0.1:host-gateway'
+      - 'rollup1-client.devnet.romeprotocol.xyz:host-gateway'
     env_file:
       -  ../envs/common-stats.env
     environment:
