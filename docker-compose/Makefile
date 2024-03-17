@@ -49,11 +49,11 @@ ${FRONTEND_ENV}:
 
 modify-nginx-port:
 	@if [ -z "${PORT}" ]; then echo "PORT is not set"; exit 1; fi
-	@sed 's/{{PORT}}/${PORT}/g' services/nginx.yml > services/nginx.yml
+	@sed -i 's/published: {{PORT}}/published: ${PORT}/g' services/nginx.yml
 	@echo "Docker Compose configuration generated with PORT=${PORT}"
 
 config: ${ROLLUP_ENV} ${FRONTEND_ENV}
-	modify-nginx-port
+	make modify-nginx-port
 	@echo "Config complete"
 
 start:
