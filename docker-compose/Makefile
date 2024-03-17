@@ -7,8 +7,9 @@ FRONTEND_ENV := envs/common-frontend.env
 ${ROLLUP_ENV}:
 	@echo "CHAIN_ID=${CHAIN_ID}" > "${ROLLUP_ENV}"
 	@echo "SUBNETWORK=${ROLLUP_NAME}" >> "${ROLLUP_ENV}"
+	@echo "ETHEREUM_JSONRPC_HTTP_URL=http://172.17.0.1:${ETH_PORT}" >> "${ROLLUP_ENV}"
+	@echo "ETHEREUM_JSONRPC_TRACE_URL=http://172.17.0.1:${ETH_PORT}" >> "${ROLLUP_ENV}"
 	@cat "${ROLLUP_ENV}"
-
 
 .PHONY: ${FRONTEND_ENV}
 ${FRONTEND_ENV}:
@@ -19,7 +20,7 @@ ${FRONTEND_ENV}:
 	@echo "NEXT_PUBLIC_NETWORK_CURRENCY_SYMBOL=${ROLLUP_NAME}" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_NETWORK_CURRENCY_DECIMALS=18" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_API_HOST=${ROLLUP_NAME}-client.devnet.romeprotocol.xyz" >> "${FRONTEND_ENV}"
-	@echo "NEXT_PUBLIC_API_PORT=${PORT}" >> "${FRONTEND_ENV}"
+	@echo "NEXT_PUBLIC_API_PORT=${BLOCKSCOUT_PORT}" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_API_PROTOCOL=http" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_STATS_API_HOST=http://${ROLLUP_NAME}-client.devnet.romeprotocol.xyz:8080" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_API_BASE_PATH=/" >> "${FRONTEND_ENV}"
@@ -58,7 +59,7 @@ generate-nginx-yml:
 	@echo "      FRONT_PROXY_PASS: http://frontend:3000" >> services/nginx.yml
 	@echo "    ports:" >> services/nginx.yml
 	@echo "      - target: 80" >> services/nginx.yml
-	@echo "        published: ${PORT}" >> services/nginx.yml
+	@echo "        published: ${BLOCKSCOUT_PORT}" >> services/nginx.yml
 	@echo "      - target: 8080" >> services/nginx.yml
 	@echo "        published: 8080" >> services/nginx.yml
 	@echo "      - target: 8081" >> services/nginx.yml
@@ -67,7 +68,8 @@ generate-nginx-yml:
 config: ${ROLLUP_ENV} ${FRONTEND_ENV}
 	@if [ -z "${CHAIN_ID}" ]; then echo "CHAIN_ID is not set"; exit 1; fi
 	@if [ -z "${ROLLUP_NAME}" ]; then echo "ROLLUP_NAME is not set"; exit 1; fi
-	@if [ -z "${PORT}" ]; then echo "PORT is not set"; exit 1; fi
+	@if [ -z "${BLOCKSCOUT_PORT}" ]; then echo "BLOCKSCOUT_PORT is not set"; exit 1; fi
+	@if [ -z "${ETH_PORT}" ]; then echo "ETH_PORT is not set"; exit 1; fi
 	@make generate-nginx-yml
 	@echo "Config complete"
 
