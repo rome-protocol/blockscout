@@ -49,7 +49,7 @@ ${FRONTEND_ENV}:
 
 modify-nginx-port:
 	@if [ -z "${PORT}" ]; then echo "PORT is not set"; exit 1; fi
-	sed -i '/- target: 80$/{n;s/published: [0-9]\+/published: NEW_PORT/;}' services/nginx.yml
+	sed '/- target: 80$/ {n; s/published: [0-9]\+/published: ${PORT}/;}' services/nginx.yml
 	@echo "Docker Compose configuration generated with PORT=${PORT}"
 
 config: ${ROLLUP_ENV} ${FRONTEND_ENV}
