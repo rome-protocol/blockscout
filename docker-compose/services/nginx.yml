@@ -13,7 +13,7 @@ services:
       FRONT_PROXY_PASS: ${FRONT_PROXY_PASS:-http://frontend:3000}
     ports:
       - target: 80
-        published: 7000 # hardcoded to port 7000
+        published: {{PORT}} # placeholder for dynamic replacement
       - target: 8080
         published: 8080
       - target: 8081
