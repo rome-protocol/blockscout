@@ -5,8 +5,6 @@ FRONTEND_ENV := envs/common-frontend.env
 
 .PHONY: ${ROLLUP_ENV}
 ${ROLLUP_ENV}:
-	@if [ -z "${CHAIN_ID}" ]; then echo "CHAIN_ID is not set"; exit 1; fi
-	@if [ -z "${ROLLUP_NAME}" ]; then echo "ROLLUP_NAME is not set"; exit 1; fi
 	@echo "CHAIN_ID=${CHAIN_ID}" > "${ROLLUP_ENV}"
 	@echo "SUBNETWORK=${ROLLUP_NAME}" >> "${ROLLUP_ENV}"
 	@cat "${ROLLUP_ENV}"
@@ -14,9 +12,6 @@ ${ROLLUP_ENV}:
 
 .PHONY: ${FRONTEND_ENV}
 ${FRONTEND_ENV}:
-	@if [ -z "${CHAIN_ID}" ]; then echo "CHAIN_ID is not set"; exit 1; fi
-	@if [ -z "${ROLLUP_NAME}" ]; then echo "ROLLUP_NAME is not set"; exit 1; fi
-	@if [ -z "${PORT}" ]; then echo "PORT is not set"; exit 1; fi
 	@echo "NEXT_PUBLIC_NETWORK_ID=${CHAIN_ID}" > "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_NETWORK_NAME=${ROLLUP_NAME}" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_NETWORK_SHORT_NAME=${ROLLUP_NAME}" >> "${FRONTEND_ENV}"
@@ -47,7 +42,6 @@ ${FRONTEND_ENV}:
 	@echo "Config written to ${FRONTEND_ENV}"
 
 generate-nginx-yml:
-	@if [ -z "${PORT}" ]; then echo "PORT is not set"; exit 1; fi
 	@echo "version: '3.9'" > services/nginx.yml
 	@echo "" >> services/nginx.yml
 	@echo "services:" >> services/nginx.yml
@@ -56,6 +50,7 @@ generate-nginx-yml:
 	@echo "    container_name: proxy" >> services/nginx.yml
 	@echo "    extra_hosts:" >> services/nginx.yml
 	@echo "      - '172.17.0.1:host-gateway'" >> services/nginx.yml
+	@echo "      - '${ROLLUP_NAME}-client.devnet.romeprotocol.xyz:host-gateway'" >> services/nginx.yml
 	@echo "    volumes:" >> services/nginx.yml
 	@echo "      - \"../proxy:/etc/nginx/templates\"" >> services/nginx.yml
 	@echo "    environment:" >> services/nginx.yml
@@ -70,6 +65,9 @@ generate-nginx-yml:
 	@echo "        published: 8081" >> services/nginx.yml
 
 config: ${ROLLUP_ENV} ${FRONTEND_ENV}
+	@if [ -z "${CHAIN_ID}" ]; then echo "CHAIN_ID is not set"; exit 1; fi
+	@if [ -z "${ROLLUP_NAME}" ]; then echo "ROLLUP_NAME is not set"; exit 1; fi
+	@if [ -z "${PORT}" ]; then echo "PORT is not set"; exit 1; fi
 	@make generate-nginx-yml
 	@echo "Config complete"
 

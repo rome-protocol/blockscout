@@ -6,6 +6,7 @@ services:
     container_name: proxy
     extra_hosts:
       - '172.17.0.1:host-gateway'
+      - 'rollup1-client.devnet.romeprotocol.xyz:host-gateway'
     volumes:
       - "../proxy:/etc/nginx/templates"
     environment:
@@ -13,7 +14,7 @@ services:
       FRONT_PROXY_PASS: http://frontend:3000
     ports:
       - target: 80
-        published: 8000
+        published: 14000
       - target: 8080
         published: 8080
       - target: 8081
