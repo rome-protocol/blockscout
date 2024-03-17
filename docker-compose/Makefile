@@ -50,4 +50,5 @@ ${FRONTEND_ENV}:
 config: ${ROLLUP_ENV} ${FRONTEND_ENV}
 	@echo "Config complete"
 
-start: docker compose -f geth.yml up
+start:
+	docker compose -f geth.yml up
