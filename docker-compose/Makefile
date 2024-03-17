@@ -16,7 +16,7 @@ ${ROLLUP_ENV}:
 ${FRONTEND_ENV}:
 	@if [ -z "${CHAIN_ID}" ]; then echo "CHAIN_ID is not set"; exit 1; fi
 	@if [ -z "${ROLLUP_NAME}" ]; then echo "ROLLUP_NAME is not set"; exit 1; fi
-	@if [ -z "${BLOCKSCOUT_PORT}" ]; then echo "BLOCKSCOUT_PORT is not set"; exit 1; fi
+	@if [ -z "${PORT}" ]; then echo "PORT is not set"; exit 1; fi
 	@echo "NEXT_PUBLIC_NETWORK_ID=${CHAIN_ID}" > "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_NETWORK_NAME=${ROLLUP_NAME}" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_NETWORK_SHORT_NAME=${ROLLUP_NAME}" >> "${FRONTEND_ENV}"
@@ -24,7 +24,7 @@ ${FRONTEND_ENV}:
 	@echo "NEXT_PUBLIC_NETWORK_CURRENCY_SYMBOL=${ROLLUP_NAME}" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_NETWORK_CURRENCY_DECIMALS=18" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_API_HOST=${ROLLUP_NAME}-client.devnet.romeprotocol.xyz" >> "${FRONTEND_ENV}"
-	@echo "NEXT_PUBLIC_API_PORT=${BLOCKSCOUT_PORT}" >> "${FRONTEND_ENV}"
+	@echo "NEXT_PUBLIC_API_PORT=${PORT}" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_API_PROTOCOL=http" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_STATS_API_HOST=http://${ROLLUP_NAME}-client.devnet.romeprotocol.xyz:8080" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_API_BASE_PATH=/" >> "${FRONTEND_ENV}"
