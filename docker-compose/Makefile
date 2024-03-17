@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Usage:
+# For Rollup state: CHAIN_ID=1 ROLLUP_NAME=rollup1 ETH_URL=http://172.17.0.1:8545 BLOCKSCOUT_PORT=7000 make config
+# For Solana State: CHAIN_ID=1 ROLLUP_NAME=rollup1 ETH_URL=http://172.17.0.1:10000/solana BLOCKSCOUT_PORT=14000 make config
+# sudo rm -rf services/blockscout-db-data
+# make start
+
 ROLLUP_ENV := envs/rollup.env
 FRONTEND_ENV := envs/common-frontend.env
 
@@ -7,8 +13,8 @@ FRONTEND_ENV := envs/common-frontend.env
 ${ROLLUP_ENV}:
 	@echo "CHAIN_ID=${CHAIN_ID}" > "${ROLLUP_ENV}"
 	@echo "SUBNETWORK=${ROLLUP_NAME}" >> "${ROLLUP_ENV}"
-	@echo "ETHEREUM_JSONRPC_HTTP_URL=http://172.17.0.1:${ETH_PORT}" >> "${ROLLUP_ENV}"
-	@echo "ETHEREUM_JSONRPC_TRACE_URL=http://172.17.0.1:${ETH_PORT}" >> "${ROLLUP_ENV}"
+	@echo "ETHEREUM_JSONRPC_HTTP_URL=${ETH_URL}" >> "${ROLLUP_ENV}"
+	@echo "ETHEREUM_JSONRPC_TRACE_URL=${ETH_URL}" >> "${ROLLUP_ENV}"
 	@cat "${ROLLUP_ENV}"
 
 .PHONY: ${FRONTEND_ENV}
@@ -69,7 +75,7 @@ config: ${ROLLUP_ENV} ${FRONTEND_ENV}
 	@if [ -z "${CHAIN_ID}" ]; then echo "CHAIN_ID is not set"; exit 1; fi
 	@if [ -z "${ROLLUP_NAME}" ]; then echo "ROLLUP_NAME is not set"; exit 1; fi
 	@if [ -z "${BLOCKSCOUT_PORT}" ]; then echo "BLOCKSCOUT_PORT is not set"; exit 1; fi
-	@if [ -z "${ETH_PORT}" ]; then echo "ETH_PORT is not set"; exit 1; fi
+	@if [ -z "${ETH_URL}" ]; then echo "ETH_URL is not set"; exit 1; fi
 	@make generate-nginx-yml
 	@echo "Config complete"
 
