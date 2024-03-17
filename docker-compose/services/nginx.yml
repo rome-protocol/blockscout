@@ -9,11 +9,11 @@ services:
     volumes:
       - "../proxy:/etc/nginx/templates"
     environment:
-      BACK_PROXY_PASS: ${BACK_PROXY_PASS:-http://backend:4000}
-      FRONT_PROXY_PASS: ${FRONT_PROXY_PASS:-http://frontend:3000}
+      BACK_PROXY_PASS: http://backend:4000
+      FRONT_PROXY_PASS: http://frontend:3000
     ports:
       - target: 80
-        published: {{PORT}} # placeholder for dynamic replacement
+        published: 8000
       - target: 8080
         published: 8080
       - target: 8081

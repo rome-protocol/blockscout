@@ -45,15 +45,32 @@ ${FRONTEND_ENV}:
 	@echo "NEXT_PUBLIC_HIDE_INDEXING_ALERT_BLOCKS=true" >> "${FRONTEND_ENV}"
 	@echo "PERMANENT_LIGHT_MODE_ENABLED=true" >> "${FRONTEND_ENV}"
 	@echo "Config written to ${FRONTEND_ENV}"
-	@cat "${FRONTEND_ENV}"
 
-modify-nginx-port:
+generate-nginx-yml:
 	@if [ -z "${PORT}" ]; then echo "PORT is not set"; exit 1; fi
-	sed '/- target: 80$/ {n; s/published: [0-9]\+/published: ${PORT}/;}' services/nginx.yml
-	@echo "Docker Compose configuration generated with PORT=${PORT}"
+	@echo "version: '3.9'" > services/nginx.yml
+	@echo "" >> services/nginx.yml
+	@echo "services:" >> services/nginx.yml
+	@echo "  proxy:" >> services/nginx.yml
+	@echo "    image: nginx" >> services/nginx.yml
+	@echo "    container_name: proxy" >> services/nginx.yml
+	@echo "    extra_hosts:" >> services/nginx.yml
+	@echo "      - '172.17.0.1:host-gateway'" >> services/nginx.yml
+	@echo "    volumes:" >> services/nginx.yml
+	@echo "      - \"../proxy:/etc/nginx/templates\"" >> services/nginx.yml
+	@echo "    environment:" >> services/nginx.yml
+	@echo "      BACK_PROXY_PASS: http://backend:4000" >> services/nginx.yml
+	@echo "      FRONT_PROXY_PASS: http://frontend:3000" >> services/nginx.yml
+	@echo "    ports:" >> services/nginx.yml
+	@echo "      - target: 80" >> services/nginx.yml
+	@echo "        published: ${PORT}" >> services/nginx.yml
+	@echo "      - target: 8080" >> services/nginx.yml
+	@echo "        published: 8080" >> services/nginx.yml
+	@echo "      - target: 8081" >> services/nginx.yml
+	@echo "        published: 8081" >> services/nginx.yml
 
 config: ${ROLLUP_ENV} ${FRONTEND_ENV}
-	make modify-nginx-port
+	@make generate-nginx-yml
 	@echo "Config complete"
 
 start:
