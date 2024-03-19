@@ -66,9 +66,9 @@ generate-nginx-yml:
 	@echo "      - target: 80" >> services/nginx.yml
 	@echo "        published: ${BLOCKSCOUT_PORT}" >> services/nginx.yml
 	@echo "      - target: 8080" >> services/nginx.yml
-	@echo "        published: 8080" >> services/nginx.yml
+	@echo "        published: 9080" >> services/nginx.yml
 	@echo "      - target: 8081" >> services/nginx.yml
-	@echo "        published: 8081" >> services/nginx.yml
+	@echo "        published: 9081" >> services/nginx.yml
 
 config: ${ROLLUP_ENV} ${FRONTEND_ENV}
 	@if [ -z "${CHAIN_ID}" ]; then echo "CHAIN_ID is not set"; exit 1; fi
