@@ -25,15 +25,15 @@ ${FRONTEND_ENV}:
 	@echo "NEXT_PUBLIC_NETWORK_CURRENCY_NAME=${ROLLUP_NAME}" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_NETWORK_CURRENCY_SYMBOL=${ROLLUP_NAME}" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_NETWORK_CURRENCY_DECIMALS=18" >> "${FRONTEND_ENV}"
-	@echo "NEXT_PUBLIC_API_HOST=${ROLLUP_NAME}-client.devnet.romeprotocol.xyz" >> "${FRONTEND_ENV}"
+	@echo "NEXT_PUBLIC_API_HOST=${ROLLUP_NAME}.devnet.romeprotocol.xyz" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_API_PORT=${BLOCKSCOUT_PORT}" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_API_PROTOCOL=http" >> "${FRONTEND_ENV}"
-	@echo "NEXT_PUBLIC_STATS_API_HOST=http://${ROLLUP_NAME}-client.devnet.romeprotocol.xyz:8080" >> "${FRONTEND_ENV}"
+	@echo "NEXT_PUBLIC_STATS_API_HOST=http://${ROLLUP_NAME}.devnet.romeprotocol.xyz:8080" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_API_BASE_PATH=/" >> "${FRONTEND_ENV}"
-	@echo "NEXT_PUBLIC_APP_HOST=${ROLLUP_NAME}-client.devnet.romeprotocol.xyz" >> "${FRONTEND_ENV}"
+	@echo "NEXT_PUBLIC_APP_HOST=${ROLLUP_NAME}.devnet.romeprotocol.xyz" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_APP_PROTOCOL=http" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_HOMEPAGE_CHARTS=['daily_txs']" >> "${FRONTEND_ENV}"
-	@echo "NEXT_PUBLIC_VISUALIZE_API_HOST=http://${ROLLUP_NAME}-client.devnet.romeprotocol.xyz:8081" >> "${FRONTEND_ENV}"
+	@echo "NEXT_PUBLIC_VISUALIZE_API_HOST=http://${ROLLUP_NAME}.devnet.romeprotocol.xyz:8081" >> "${FRONTEND_ENV}"
 	@echo "# NEXT_PUBLIC_IS_TESTNET=true" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL=ws" >> "${FRONTEND_ENV}"
 	@echo "NEXT_PUBLIC_API_SPEC_URL=http://raw.githubusercontent.com/blockscout/blockscout-api-v2-swagger/main/swagger.yaml" >> "${FRONTEND_ENV}"
@@ -57,7 +57,7 @@ generate-nginx-yml:
 	@echo "    container_name: proxy" >> services/nginx.yml
 	@echo "    extra_hosts:" >> services/nginx.yml
 	@echo "      - '172.17.0.1:host-gateway'" >> services/nginx.yml
-	@echo "      - '${ROLLUP_NAME}-client.devnet.romeprotocol.xyz:host-gateway'" >> services/nginx.yml
+	@echo "      - '${ROLLUP_NAME}.devnet.romeprotocol.xyz:host-gateway'" >> services/nginx.yml
 	@echo "    volumes:" >> services/nginx.yml
 	@echo "      - \"../proxy:/etc/nginx/templates\"" >> services/nginx.yml
 	@echo "    environment:" >> services/nginx.yml
