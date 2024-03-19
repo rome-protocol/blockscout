@@ -81,3 +81,6 @@ config: ${ROLLUP_ENV} ${FRONTEND_ENV}
 
 start:
 	docker compose -f geth.yml up
+
+start-detached:
+	docker compose -f geth.yml up -d
