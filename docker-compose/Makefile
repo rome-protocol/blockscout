@@ -80,13 +80,13 @@ config: ${ROLLUP_ENV} ${FRONTEND_ENV}
 	@echo "Config complete"
 
 start-geth:
-	docker compose -f geth.yml up -p geth-explorer
+	docker compose -p geth-explorer -f geth.yml up
 
 start-detached-geth:
-	docker compose -f geth.yml up -d -p geth-explorer
+	docker compose -p geth-explorer -f geth.yml up -d
 
 start-proxy:
-	docker compose -f geth.yml up -p proxy-explorer
+	docker compose -p proxy-explorer -f geth.yml up
 
 start-detached-proxy:
-	docker compose -f geth.yml up -d -p proxy-explorer
+	docker compose -p proxy-explorer -f geth.yml up -d
