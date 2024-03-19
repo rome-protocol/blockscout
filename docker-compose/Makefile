@@ -54,7 +54,6 @@ generate-nginx-yml:
 	@echo "services:" >> services/nginx.yml
 	@echo "  proxy:" >> services/nginx.yml
 	@echo "    image: nginx" >> services/nginx.yml
-	@echo "    container_name: proxy" >> services/nginx.yml
 	@echo "    extra_hosts:" >> services/nginx.yml
 	@echo "      - '172.17.0.1:host-gateway'" >> services/nginx.yml
 	@echo "      - '${ROLLUP_NAME}.devnet.romeprotocol.xyz:host-gateway'" >> services/nginx.yml
