@@ -79,8 +79,14 @@ config: ${ROLLUP_ENV} ${FRONTEND_ENV}
 	@make generate-nginx-yml
 	@echo "Config complete"
 
-start:
-	docker compose -f geth.yml up
+start-geth:
+	docker compose -f geth.yml up -p geth-explorer
 
-start-detached:
-	docker compose -f geth.yml up -d
+start-detached-geth:
+	docker compose -f geth.yml up -d -p geth-explorer
+
+start-proxy:
+	docker compose -f geth.yml up -p proxy-explorer
+
+start-detached-proxy:
+	docker compose -f geth.yml up -d -p proxy-explorer
