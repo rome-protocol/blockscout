@@ -42,10 +42,6 @@ services:
       - db:database
     env_file:
       - rollup.env
-    environment:
-      ETHEREUM_JSONRPC_HTTP_URL: https://172.17.0.1:8443
-      ETHEREUM_JSONRPC_TRACE_URL: https://172.17.0.1:8443
-      ETHEREUM_JSONRPC_WS_URL: wss://172.17.0.1/ws
 
   visualizer:
     extends:
