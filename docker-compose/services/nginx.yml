@@ -8,11 +8,13 @@ services:
       - 'rollup1-client.devnet.romeprotocol.xyz:host-gateway'
     volumes:
       - "../proxy:/etc/nginx/templates"
+      - "/etc/letsencrypt/live/${ROLLUP_NAME}.devnet.romeprotocol.xyz/fullchain.pem:/etc/nginx/ssl/selfsigned.crt"
+      - "/etc/letsencrypt/live/${ROLLUP_NAME}.devnet.romeprotocol.xyz/privkey.pem:/etc/nginx/ssl/selfsigned.key"
     environment:
       BACK_PROXY_PASS: http://backend:4000
       FRONT_PROXY_PASS: http://frontend:3000
     ports:
-      - target: 80
+      - target: 443
         published: 14000
       - target: 8080
         published: 8080
