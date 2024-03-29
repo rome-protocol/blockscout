@@ -65,7 +65,7 @@ generate-nginx-yml:
 	@echo "      BACK_PROXY_PASS: http://backend:4000" >> services/nginx.yml
 	@echo "      FRONT_PROXY_PASS: http://frontend:3000" >> services/nginx.yml
 	@echo "    ports:" >> services/nginx.yml
-	@echo "      - target: 80" >> services/nginx.yml
+	@echo "      - target: 443" >> services/nginx.yml
 	@echo "        published: ${BLOCKSCOUT_PORT}" >> services/nginx.yml
 	@echo "      - target: 8080" >> services/nginx.yml
 	@echo "        published: 8080" >> services/nginx.yml
