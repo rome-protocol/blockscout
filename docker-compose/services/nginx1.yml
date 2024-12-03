@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  blockscout_proxy1:
+    image: nginx
+    container_name: blockscout_proxy1
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+      - 'romeevm.devnet.romeprotocol.xyz:host-gateway'
+    volumes:
+      - ../proxy:/etc/nginx/templates
+      - /etc/letsencrypt/live/romeevm.devnet.romeprotocol.xyz/fullchain.pem:/etc/nginx/ssl/selfsigned.crt
+      - /etc/letsencrypt/live/romeevm.devnet.romeprotocol.xyz/privkey.pem:/etc/nginx/ssl/selfsigned.key
+    environment:
+      BACK_PROXY_PASS: http://backend:4000
+      FRONT_PROXY_PASS: http://frontend1:3000
+    ports:
+      - target: 443
+        published: 1001
+      - target: 8080
+        published: 8090
+      - target: 8081
+        published: 8091
