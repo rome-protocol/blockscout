@@ -102,7 +102,7 @@ defmodule Indexer.Fetcher.Arbitrum.Utils.Rpc do
     Constructs a JSON RPC request to retrieve a transaction by its hash.
 
     ## Parameters
-    - `%{hash: tx_hash, id: id}`: A map containing the transaction hash (`tx_hash`) and
+    - `%{hash: transaction_hash, id: id}`: A map containing the transaction hash (`transaction_hash`) and
       an identifier (`id`) for the request, which can be used later to establish
       correspondence between requests and responses.
 
@@ -111,9 +111,9 @@ defmodule Indexer.Fetcher.Arbitrum.Utils.Rpc do
       the transaction details associated with the given hash.
   """
   @spec transaction_by_hash_request(%{hash: EthereumJSONRPC.hash(), id: non_neg_integer()}) :: Transport.request()
-  def transaction_by_hash_request(%{id: id, hash: tx_hash})
-      when is_binary(tx_hash) and is_integer(id) do
-    EthereumJSONRPC.request(%{id: id, method: "eth_getTransactionByHash", params: [tx_hash]})
+  def transaction_by_hash_request(%{id: id, hash: transaction_hash})
+      when is_binary(transaction_hash) and is_integer(id) do
+    EthereumJSONRPC.request(%{id: id, method: "eth_getTransactionByHash", params: [transaction_hash]})
   end
 
   @doc """
@@ -325,7 +325,7 @@ defmodule Indexer.Fetcher.Arbitrum.Utils.Rpc do
     Executes a list of transaction requests and retrieves the sender (from) addresses for each.
 
     ## Parameters
-    - `txs_requests`: A list of `Transport.request()` instances representing the transaction requests.
+    - `transactions_requests`: A list of `Transport.request()` instances representing the transaction requests.
     - `json_rpc_named_arguments`: Configuration parameters for the JSON RPC connection.
     - `chunk_size`: The number of requests to be processed in each batch, defining the size of the chunks.
 
@@ -337,9 +337,9 @@ defmodule Indexer.Fetcher.Arbitrum.Utils.Rpc do
           EthereumJSONRPC.json_rpc_named_arguments(),
           non_neg_integer()
         ) :: [%{EthereumJSONRPC.hash() => EthereumJSONRPC.address()}]
-  def execute_transactions_requests_and_get_from(txs_requests, json_rpc_named_arguments, chunk_size)
-      when is_list(txs_requests) and is_integer(chunk_size) do
-    txs_requests
+  def execute_transactions_requests_and_get_from(transactions_requests, json_rpc_named_arguments, chunk_size)
+      when is_list(transactions_requests) and is_integer(chunk_size) do
+    transactions_requests
     |> Enum.chunk_every(chunk_size)
     |> Enum.reduce(%{}, fn chunk, result ->
       chunk
@@ -420,6 +420,57 @@ defmodule Indexer.Fetcher.Arbitrum.Utils.Rpc do
     else
       configured_number
     end
+  end
+
+  @doc """
+    Retrieves the safe and latest L1 block numbers.
+
+    This function fetches the latest block number from the chain and tries to determine
+    the safe block number. If the RPC node does not support the safe block feature or
+    if the safe block is too far behind the latest block, the safe block is determined
+    based on the finalization threshold. In both cases, it steps back from the latest
+    block to mark some blocks as unfinalized.
+
+    ## Parameters
+    - `json_rpc_named_arguments`: The named arguments for the JSON RPC call.
+    - `hard_limit`: The maximum number of blocks to step back when determining the safe block.
+
+    ## Returns
+    - A tuple containing the safe block number and the latest block number.
+  """
+  @spec get_safe_and_latest_l1_blocks(EthereumJSONRPC.json_rpc_named_arguments(), non_neg_integer()) ::
+          {EthereumJSONRPC.block_number(), EthereumJSONRPC.block_number()}
+  def get_safe_and_latest_l1_blocks(json_rpc_named_arguments, hard_limit) do
+    finalization_threshold = Application.get_all_env(:indexer)[Indexer.Fetcher.Arbitrum][:l1_finalization_threshold]
+
+    {safe_chain_block, is_latest?} = IndexerHelper.get_safe_block(json_rpc_named_arguments)
+
+    latest_chain_block =
+      case is_latest? do
+        true ->
+          safe_chain_block
+
+        false ->
+          {:ok, latest_block} =
+            IndexerHelper.get_block_number_by_tag("latest", json_rpc_named_arguments, get_resend_attempts())
+
+          latest_block
+      end
+
+    safe_block =
+      if safe_chain_block < latest_chain_block + 1 - finalization_threshold or is_latest? do
+        # The first condition handles the case when the safe block is too far behind
+        # the latest block (L3 case).
+        # The second condition handles the case when the L1 RPC node does not support
+        # the safe block feature (non standard Arbitrum deployments).
+        # In both cases, it is necessary to step back a bit from the latest block to
+        # suspect these blocks as unfinalized.
+        latest_chain_block + 1 - min(finalization_threshold, hard_limit)
+      else
+        safe_chain_block
+      end
+
+    {safe_block, latest_chain_block}
   end
 
   @doc """
@@ -595,7 +646,9 @@ defmodule Indexer.Fetcher.Arbitrum.Utils.Rpc do
       # inspected block is in the boundary of the required batch: the current batch is the same
       # as one found in the previous iteration or the step is not the smallest possible.
 
-      next_block_to_inspect = max(1, inspected_block - new_step)
+      # it is OK to use the earliest block 0 as since the corresponding batch (0)
+      # will be returned by get_batch_number_for_rollup_block.
+      next_block_to_inspect = max(0, inspected_block - new_step)
 
       do_binary_search_of_opposite_block(
         next_block_to_inspect,
@@ -712,13 +765,13 @@ defmodule Indexer.Fetcher.Arbitrum.Utils.Rpc do
   @spec string_hash_to_bytes_hash(EthereumJSONRPC.hash() | nil) :: binary()
   def string_hash_to_bytes_hash(hash) do
     hash
-    |> json_tx_id_to_hash()
+    |> json_transaction_id_to_hash()
     |> Base.decode16!(case: :mixed)
   end
 
-  defp json_tx_id_to_hash(hash) do
+  defp json_transaction_id_to_hash(hash) do
     case hash do
-      "0x" <> tx_hash -> tx_hash
+      "0x" <> transaction_hash -> transaction_hash
       nil -> @zero_hash
     end
   end
