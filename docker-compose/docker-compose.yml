@@ -63,6 +63,14 @@ services:
       file: ./services/frontend.yml
       service: frontend
 
+  frontend1:
+    depends_on:
+      - backend
+    extends:
+      file: ./services/frontend1.yml
+      service: frontend
+
+
   stats-db-init:
     extends:
       file: ./services/stats.yml
@@ -100,3 +108,12 @@ services:
     extends:
       file: ./services/nginx.yml
       service: blockscout_proxy
+
+  blockscout_proxy1:
+    depends_on:
+      - backend
+      - frontend
+      - stats
+    extends:
+      file: ./services/nginx1.yml
+      service: blockscout_proxy1
