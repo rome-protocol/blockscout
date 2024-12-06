@@ -112,7 +112,7 @@ services:
   blockscout_proxy1:
     depends_on:
       - backend
-      - frontend
+      - frontend1
       - stats
     extends:
       file: ./services/nginx1.yml
