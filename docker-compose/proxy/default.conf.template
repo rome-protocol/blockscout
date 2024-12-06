@@ -7,8 +7,8 @@ map $http_upgrade $connection_upgrade {
 # Define allowed origins using `map`
 map $http_origin $cors_allowed_origin {
         default "";
-        "https://l2.testnet.romeprotocol.xyz:1001" $http_origin;
-        "https://l2lb.testnet.romeprotocol.xyz:1000" $http_origin;
+        "https://romeevm.devnet.romeprotocol.xyz:1001" $http_origin;
+        "https://romeevmlb.devnet.romeprotocol.xyz:1000" $http_origin;
     }
 
 
