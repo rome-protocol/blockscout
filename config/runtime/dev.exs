@@ -117,8 +117,24 @@ config :explorer, Explorer.Repo.PolygonZkevm,
   # separating repos for different CHAIN_TYPE is implemented only for the sake of keeping DB schema update relevant to the current chain type
   pool_size: 1
 
+# Configure Scroll database
+config :explorer, Explorer.Repo.Scroll,
+  database: database,
+  hostname: hostname,
+  url: System.get_env("DATABASE_URL"),
+  pool_size: 1
+
 # Configure ZkSync database
 config :explorer, Explorer.Repo.ZkSync,
+  database: database,
+  hostname: hostname,
+  url: System.get_env("DATABASE_URL"),
+  # actually this repo is not started, and its pool size remains unused.
+  # separating repos for different CHAIN_TYPE is implemented only for the sake of keeping DB schema update relevant to the current chain type
+  pool_size: 1
+
+# Configure Celo database
+config :explorer, Explorer.Repo.Celo,
   database: database,
   hostname: hostname,
   url: System.get_env("DATABASE_URL"),
@@ -182,6 +198,20 @@ config :explorer, Explorer.Repo.Mud,
   url: ExplorerConfigHelper.get_mud_db_url(),
   pool_size: ConfigHelper.parse_integer_env_var("MUD_POOL_SIZE", 10),
   queue_target: queue_target
+
+# Configures ShrunkInternalTransactions database
+config :explorer, Explorer.Repo.ShrunkInternalTransactions,
+  database: database,
+  hostname: hostname,
+  url: System.get_env("DATABASE_URL"),
+  pool_size: 1
+
+# Configures Blackfort database
+config :explorer, Explorer.Repo.Blackfort,
+  database: database,
+  hostname: hostname,
+  url: System.get_env("DATABASE_URL"),
+  pool_size: 1
 
 variant = Variant.get()
 

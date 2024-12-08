@@ -16,7 +16,7 @@ services:
       FRONT_PROXY_PASS: http://frontend:3000
     ports:
       - target: 443
-        published: 1000
+        published: 1001
       - target: 8080
         published: 8080
       - target: 8081

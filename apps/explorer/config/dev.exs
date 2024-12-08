@@ -20,8 +20,13 @@ config :explorer, Explorer.Repo.PolygonEdge, timeout: :timer.seconds(80)
 # Configure Polygon zkEVM database
 config :explorer, Explorer.Repo.PolygonZkevm, timeout: :timer.seconds(80)
 
+# Configure Scroll database
+config :explorer, Explorer.Repo.Scroll, timeout: :timer.seconds(80)
+
 # Configure ZkSync database
 config :explorer, Explorer.Repo.ZkSync, timeout: :timer.seconds(80)
+
+config :explorer, Explorer.Repo.Celo, timeout: :timer.seconds(80)
 
 config :explorer, Explorer.Repo.RSK, timeout: :timer.seconds(80)
 
@@ -41,6 +46,10 @@ config :explorer, Explorer.Repo.Filecoin, timeout: :timer.seconds(80)
 config :explorer, Explorer.Repo.Stability, timeout: :timer.seconds(80)
 
 config :explorer, Explorer.Repo.Mud, timeout: :timer.seconds(80)
+
+config :explorer, Explorer.Repo.ShrunkInternalTransactions, timeout: :timer.seconds(80)
+
+config :explorer, Explorer.Repo.Blackfort, timeout: :timer.seconds(80)
 
 config :explorer, Explorer.Tracer, env: "dev", disabled?: true
 
